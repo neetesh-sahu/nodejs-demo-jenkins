@@ -1,32 +1,27 @@
+@Library('shared') _
 pipeline {
     agent { label "worker" }
 
     stages {
         stage('code') {
             steps {
-                echo 'This is cloning the code'
-                git url: 'https://github.com/neetesh-sahu/nodejs-demo-jenkins.git' , branch: 'main'
-                 echo 'code cloned successful'
+                script {
+                    code('https://github.com/neetesh-sahu/nodejs-demo-jenkins.git', 'main')
+                }
             }
         }
         stage('build'){
             steps {
-                echo 'building the nodejs app'
-                sh 'docker build -t nodejs-app:latest .'
-                echo 'build successful'
+               script {
+                    docker_build('nodejs-app', 'latest', 'DockerHubUser')
+                }
             }
         }
         stage('Push to dockerhub') {
             steps {
-                echo 'pushing latest image to dockerhub'
-                withCredentials([usernamePassword('credentialsId': "DockerHubCred" , 
-                passwordVariable:'DockerHubPass' , 
-                usernameVariable: 'DockerHubUser')]){
-                    sh 'docker login -u $DockerHubUser -p $DockerHubPass'
-                    sh 'docker image tag nodejs-app:latest $DockerHubUser/nodejs-app:latest'
-                    sh 'docker push $DockerHubUser/nodejs-app:latest'
+               script {
+                    docker_push('nodejs-app', 'latest', 'DockerHubUser', 'DockerHubPass')
                 }
-                echo 'image pushed to dockerhub'
             }
         }
         stage('deploy'){

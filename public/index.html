@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elevate Labs - Task 1</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0f172a; color: #e2e8f0;
+           display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .card { background: #1e293b; padding: 2rem 2.5rem; border-radius: 12px; max-width: 480px; width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+    h1 { margin-top: 0; color: #38bdf8; }
+    input, button { padding: .6rem .8rem; border-radius: 6px; border: none; font-size: 1rem; }
+    input { width: 60%; }
+    button { background: #38bdf8; color: #0f172a; cursor: pointer; font-weight: bold; }
+    pre { background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; }
+    a { color: #38bdf8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Hello from Node.js</h1>
+    <p>Elevate Labs Internship - Task 1</p>
+    <input id="name" placeholder="Enter your name" />
+    <button onclick="greet()">Greet</button>
+    <pre id="out">Click the button...</pre>
+    <p><a href="/api/info">/api/info</a> | <a href="/health">/health</a></p>
+  </div>
+  <script>
+    async function greet() {
+      const name = document.getElementById("name").value || "World";
+      const res = await fetch("/api/hello?name=" + encodeURIComponent(name));
+      document.getElementById("out").textContent = JSON.stringify(await res.json(), null, 2);
+    }
+  </script>
+</body>
+</html>

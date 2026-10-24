@@ -33,7 +33,7 @@ pipeline {
             steps {
                 echo 'deploying the node app'
                 sh 'docker compose down'
-                sh 'docker compose up -d'
+                sh 'docker compose up -d --build'
                 echo 'nodejs app live check on port 3000'
             }
         }
